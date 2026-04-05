@@ -1,28 +1,46 @@
-function setAlarm() {
-  var totalSeconds = Number(document.getElementById("alarmSet").value);
+var timer = null;
+var remainingTime = 0;
 
-  function updateDisplay(seconds) {
-    var minutes = Math.floor(seconds / 60);
-    var remainingSeconds = seconds % 60;
-    var display =
-      String(minutes).padStart(2, "0") +
-      ":" +
-      String(remainingSeconds).padStart(2, "0");
-    document.getElementById("timeRemaining").innerText =
-      "Time Remaining: " + display;
-  }
+function updateDisplay(seconds) {
+  var minutes = Math.floor(seconds / 60);
+  var remainingSeconds = seconds % 60;
+  var display =
+    String(minutes).padStart(2, "0") +
+    ":" +
+    String(remainingSeconds).padStart(2, "0");
+  document.getElementById("timeRemaining").innerText =
+    "Time Remaining: " + display;
+}
 
-  updateDisplay(totalSeconds);
+function startCountdown() {
+  timer = setInterval(function () {
+    remainingTime = remainingTime - 1;
+    updateDisplay(remainingTime);
 
-  var timer = setInterval(function () {
-    totalSeconds = totalSeconds - 1;
-    updateDisplay(totalSeconds);
-
-    if (totalSeconds === 0) {
+    if (remainingTime === 0) {
       clearInterval(timer);
+      timer = null;
       playAlarm();
     }
   }, 1000);
+}
+
+function setAlarm() {
+  if (timer) {
+    clearInterval(timer);
+  }
+  remainingTime = Number(document.getElementById("alarmSet").value);
+  updateDisplay(remainingTime);
+  startCountdown();
+}
+
+function pauseAlarm() {
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  } else if (remainingTime > 0) {
+    startCountdown();
+  }
 }
 
 // DO NOT EDIT BELOW HERE
@@ -35,15 +53,20 @@ function setup() {
   });
 
   document.getElementById("stop").addEventListener("click", () => {
+    stopAlarm();
+  });
+
+  document.getElementById("pause").addEventListener("click", () => {
     pauseAlarm();
   });
 }
+
 
 function playAlarm() {
   audio.play();
 }
 
-function pauseAlarm() {
+function stopAlarm() {
   audio.pause();
 }
 
