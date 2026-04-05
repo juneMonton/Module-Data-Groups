@@ -1,1 +1,23 @@
-/** Write your CSS in here **/
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+    background-color: lightblue;
+}
+
+button {
+    background-color: navy;
+    color: white;
+}
+
+#carousel-img {
+    width: 400px;
+    height: 300px;
+    object-fit: cover;
+}
+
+.controls {
+    margin-top: 10px;
+}
